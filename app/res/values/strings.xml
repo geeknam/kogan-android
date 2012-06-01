@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Basedroid</string>
+    <string name="app_name">Kogan Android</string>
 
     <string name="main_list_view_example_button_text">ListView Example</string>
     <string name="main_view_pager_example_button_text">View Pager!</string>

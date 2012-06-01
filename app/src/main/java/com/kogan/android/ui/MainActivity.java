@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.google.inject.Inject;
-import com.twansoftware.basedroid.R;
-import com.twansoftware.basedroid.ui.examples.ActionBarButtonsExample;
-import com.twansoftware.basedroid.ui.examples.ListActivityExample;
-import com.twansoftware.basedroid.ui.examples.ViewPagerExample;
+import com.kogan.android.R;
+import com.kogan.android.ui.examples.ActionBarButtonsExample;
+import com.kogan.android.ui.examples.ListActivityExample;
+import com.kogan.android.ui.examples.ViewPagerExample;
 import roboguice.inject.InjectView;
 
 public class MainActivity extends RoboSherlockActivity implements View.OnClickListener {

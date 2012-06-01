@@ -1,5 +1,5 @@
 import android.content.Context;
-import com.twansoftware.basedroid.singleton.BasedroidHttpClient;
+import com.kogan.android.singleton.BasedroidHttpClient;
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.shadows.HttpResponseGenerator;
 import com.xtremelabs.robolectric.tester.org.apache.http.TestHttpResponse;

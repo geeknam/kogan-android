@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
-import com.twansoftware.basedroid.R;
+import com.kogan.android.R;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 import roboguice.inject.InjectView;

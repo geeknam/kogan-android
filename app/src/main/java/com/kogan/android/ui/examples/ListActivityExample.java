@@ -9,8 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockListActivity;
 import com.google.inject.Inject;
-import com.twansoftware.basedroid.R;
-import com.twansoftware.basedroid.singleton.BasedroidHttpClient;
+import com.kogan.android.R;
+import com.kogan.android.singleton.BasedroidHttpClient;
 
 public class ListActivityExample extends RoboSherlockListActivity implements AdapterView.OnItemClickListener {
     private static final String[] EXAMPLE_STRINGS = {"Android", "iPhone", "Blackberry"};

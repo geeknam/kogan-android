@@ -6,7 +6,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
-import com.twansoftware.basedroid.R;
+import com.kogan.android.R;
 
 /**
  * Author: achuinard

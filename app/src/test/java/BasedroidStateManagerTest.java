@@ -1,6 +1,6 @@
 import android.content.Context;
-import com.twansoftware.basedroid.entity.SamplePojo;
-import com.twansoftware.basedroid.singleton.BasedroidStateManager;
+import com.kogan.android.entity.SamplePojo;
+import com.kogan.android.singleton.BasedroidStateManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
