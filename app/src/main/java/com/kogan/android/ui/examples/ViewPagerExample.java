@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+import com.actionbarsherlock.app.ActionBar;
 import com.kogan.android.R;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
@@ -18,7 +19,7 @@ import roboguice.inject.InjectView;
  * Author: achuinard
  * 4/25/12
  */
-public class ViewPagerExample extends RoboSherlockActivity {
+public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.OnNavigationListener{
     @InjectView(R.id.view_pager_example_pager)
     private ViewPager viewPager;
     
@@ -30,6 +31,7 @@ public class ViewPagerExample extends RoboSherlockActivity {
     private static final String[] COUNTRIES = {"United States", "Mexico", "Canada"};
     private static final String[] STATES = {"Illinois", "Kentucky", "Maine", "Florida"};
 
+    private String[] departments;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -37,6 +39,14 @@ public class ViewPagerExample extends RoboSherlockActivity {
         setContentView(R.layout.view_pager_example);
 
         setupViewPager();
+        
+        departments = getResources().getStringArray(R.array.departments);
+        Context context = getSupportActionBar().getThemedContext();
+        ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.departments, R.layout.sherlock_spinner_item);
+        list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+
+        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        getSupportActionBar().setListNavigationCallbacks(list, this);
     }
 
     private void setupViewPager() {
@@ -45,6 +55,11 @@ public class ViewPagerExample extends RoboSherlockActivity {
 
         viewPager.setAdapter(new CustomPagerAdapter(this));
         titlePageIndicator.setViewPager(viewPager);
+    }
+    
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        return true;
     }
 
     private class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
@@ -93,5 +108,6 @@ public class ViewPagerExample extends RoboSherlockActivity {
                 return "Unknown";
             }
         }
+       
     }
 }

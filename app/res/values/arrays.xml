@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="departments">
+        <item>Televisions</item>
+        <item>Home Appliances</item>
+        <item>Cameras</item>
+        <item>Tablets & Laptops</item>
+        <item>Audio</item>
+        <item>Phones</item>
+    </string-array>
+</resources>
