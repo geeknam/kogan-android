@@ -8,10 +8,7 @@ import roboguice.util.Ln;
 
 import java.io.Serializable;
 
-/**
- * Author: achuinard
- * 4/5/12
- */
+
 @Singleton
 public class BasedroidStateManager {
     private static final String DEFAULT_NULL_STRING = "";

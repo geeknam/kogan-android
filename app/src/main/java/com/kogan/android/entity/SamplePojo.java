@@ -2,10 +2,7 @@ package com.kogan.android.entity;
 
 import java.io.Serializable;
 
-/**
- * Author: achuinard
- * 4/23/12
- */
+
 public class SamplePojo implements Serializable {
     private final String stringOne;
     private final int intOne;

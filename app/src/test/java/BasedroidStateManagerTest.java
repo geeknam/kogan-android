@@ -11,10 +11,7 @@ import java.util.UUID;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * Author: achuinard
- * 4/23/12
- */
+
 @RunWith(RobolectricRoboTestRunner.class)
 public class BasedroidStateManagerTest {
     protected Context context = new RoboActivity();

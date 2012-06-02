@@ -8,10 +8,6 @@ import com.actionbarsherlock.view.Window;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.kogan.android.R;
 
-/**
- * Author: achuinard
- * 4/25/12
- */
 public class ActionBarButtonsExample extends RoboSherlockActivity {
 
     @Override

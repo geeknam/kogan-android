@@ -15,10 +15,6 @@ import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 import roboguice.inject.InjectView;
 
-/**
- * Author: achuinard
- * 4/25/12
- */
 public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.OnNavigationListener{
     @InjectView(R.id.view_pager_example_pager)
     private ViewPager viewPager;

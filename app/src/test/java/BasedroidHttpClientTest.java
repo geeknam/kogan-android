@@ -13,10 +13,7 @@ import roboguice.test.RobolectricRoboTestRunner;
 
 import static junit.framework.Assert.*;
 
-/**
- * Author: achuinard
- * 4/18/12
- */
+
 @RunWith(RobolectricRoboTestRunner.class)
 public class BasedroidHttpClientTest {
     protected Context context = new RoboActivity();

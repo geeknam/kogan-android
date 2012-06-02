@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <style name="CustomTabPageIndicator" parent="Widget.TabPageIndicator">
-        <item name="android:textColor">#FF555555</item>
+    <style parent="Widget.TitlePageIndicator"
+        name="Widget.MyTitlepageIndicator">
+        <item name="footerColor">#bf0909</item>
+        <item name="footerIndicatorStyle">underline</item>
+        <item name="footerIndicatorHeight">3dp</item>
+        <item name="footerLineHeight">1.5dp</item>
+        <item name="footerPadding">6dp</item>
+        <item name="selectedColor">#bf0909</item>
     </style>
 </resources>
