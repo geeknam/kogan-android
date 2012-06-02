@@ -29,6 +29,14 @@ public class Product {
 	
 	@SerializedName("free_shipping")
 	public boolean freeShipping;
-	
+
+	public String getTitle(){
+		return this.title;
+	}
+
+	@Override
+	public String toString(){
+		return title;
+	}
 	
 }

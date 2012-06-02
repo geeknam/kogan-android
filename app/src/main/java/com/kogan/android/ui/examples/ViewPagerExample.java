@@ -15,6 +15,16 @@ import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 import roboguice.inject.InjectView;
 
+import com.kogan.android.core.KoganService;
+import com.kogan.android.core.Product;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.IOException;
+import android.os.AsyncTask;
+import android.widget.Toast;
+import android.util.Log;
+import static com.kogan.android.core.KoganConstants.URL_PRODUCT;
+
 public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.OnNavigationListener{
     @InjectView(R.id.view_pager_example_pager)
     private ViewPager viewPager;
@@ -24,7 +34,7 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
 
     private ArrayAdapter<String> countriesAdapter;
     private ArrayAdapter<String> statesAdapter;
-    private static final String[] COUNTRIES = {"United States", "Mexico", "Canada"};
+    private String[] TELEVISIONS = null;
     private static final String[] STATES = {"Illinois", "Kentucky", "Maine", "Florida"};
 
     private String[] departments;
@@ -34,7 +44,7 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pager_example);
 
-        setupViewPager();
+        new ProgressTask(ViewPagerExample.this).execute();
         
         departments = getResources().getStringArray(R.array.departments);
         Context context = getSupportActionBar().getThemedContext();
@@ -46,12 +56,53 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
     }
 
     private void setupViewPager() {
-        countriesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, COUNTRIES);
+
+        countriesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, TELEVISIONS);
         statesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, STATES);
 
         viewPager.setAdapter(new CustomPagerAdapter(this));
         titlePageIndicator.setViewPager(viewPager);
     }
+
+    private class ProgressTask extends AsyncTask<String, Void, Boolean> {
+        private RoboSherlockActivity activity;
+        private Context context;
+
+        public ProgressTask(RoboSherlockActivity activity) {
+            this.activity = activity;
+            context = activity;
+        }
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            setupViewPager();
+        }
+
+        protected Boolean doInBackground(final String... args) {
+            String url = URL_PRODUCT + "&department=televisions";
+            KoganService service = new KoganService();
+            List<String> titles = new ArrayList<String>();
+            try{
+                List<Product> products = service.getProducts(url);
+                for(Product p : products){
+                    titles.add(p.getTitle());
+                    Log.d("KOGANNNNNNN", p.toString());
+                    Log.d("KOGANNNNNNN", p.getTitle());
+                }
+            } catch (IOException ignored) {
+                Log.d("KOGANNNNNNN", "IOEXCEPTION");
+            }
+
+            TELEVISIONS = new String[titles.size()];
+            TELEVISIONS = titles.toArray(TELEVISIONS);
+
+            return true;
+        }
+    }
+
     
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
@@ -97,7 +148,7 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
 
         public String getTitle(final int position) {
             if (position == 0) {
-                return "Countries";
+                return "Televisions";
             } else if (position == 1) {
                 return "States";
             } else {
