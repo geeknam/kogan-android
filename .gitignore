@@ -1,4 +1,7 @@
-app/target/
-app/tmp/
-.project
+.DS_Store
+target
+bin
+lib
+tmp
+gen
 .settings/
