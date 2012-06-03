@@ -19,10 +19,14 @@ import com.kogan.android.core.KoganService;
 import com.kogan.android.core.Product;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
 import java.io.IOException;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import android.util.Log;
+import android.app.ProgressDialog;
 import static com.kogan.android.core.KoganConstants.URL_PRODUCT;
 
 public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.OnNavigationListener{
@@ -32,20 +36,23 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
     @InjectView(R.id.view_pager_example_tpi)
     private TitlePageIndicator titlePageIndicator;
 
-    private ArrayAdapter<String> countriesAdapter;
-    private ArrayAdapter<String> statesAdapter;
-    private String[] TELEVISIONS = null;
-    private static final String[] STATES = {"Illinois", "Kentucky", "Maine", "Florida"};
+    private ArrayList<ArrayAdapter<String>> arrayAdapters = new ArrayList<ArrayAdapter<String>>();
 
     private String[] departments;
+    private Map<String, ArrayList<String>> DEPS = new HashMap<String, ArrayList<String>>();
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pager_example);
 
-        new ProgressTask(ViewPagerExample.this).execute();
-        
+        DEPS.put("televisions", new ArrayList<String>());
+        DEPS.put("phones", new ArrayList<String>());
+        DEPS.put("cameras", new ArrayList<String>());
+
+        new ProgressTask(ViewPagerExample.this, DEPS).execute();
+
         departments = getResources().getStringArray(R.array.departments);
         Context context = getSupportActionBar().getThemedContext();
         ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.departments, R.layout.sherlock_spinner_item);
@@ -57,47 +64,63 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
 
     private void setupViewPager() {
 
-        countriesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, TELEVISIONS);
-        statesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, STATES);
+        for(ArrayList<String> dep : DEPS.values()){
+            arrayAdapters.add(new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                dep.toArray(new String[dep.size()]))
+            );
+        }
 
         viewPager.setAdapter(new CustomPagerAdapter(this));
         titlePageIndicator.setViewPager(viewPager);
     }
 
-    private class ProgressTask extends AsyncTask<String, Void, Boolean> {
+    private class ProgressTask extends AsyncTask<String, Integer, Boolean> {
         private RoboSherlockActivity activity;
-        private Context context;
+        private Map<String, ArrayList<String>> departments;
+        private ArrayList<String> slugs;
+        private ProgressDialog dialog;
 
-        public ProgressTask(RoboSherlockActivity activity) {
+        public ProgressTask(RoboSherlockActivity activity, Map<String, ArrayList<String>> departments) {
             this.activity = activity;
-            context = activity;
+            this.departments = departments;
+            this.slugs = new ArrayList<String>(departments.keySet());
+
         }
 
         protected void onPreExecute() {
+            dialog = ProgressDialog.show(activity, "Please wait...", "Fetching products...");
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             setupViewPager();
+            dialog.dismiss();
         }
 
-        protected Boolean doInBackground(final String... args) {
-            String url = URL_PRODUCT + "&department=televisions";
-            KoganService service = new KoganService();
-            List<String> titles = new ArrayList<String>();
-            try{
-                List<Product> products = service.getProducts(url);
-                for(Product p : products){
-                    titles.add(p.getTitle());
-                    Log.d("KOGANNNNNNN", p.toString());
-                    Log.d("KOGANNNNNNN", p.getTitle());
-                }
-            } catch (IOException ignored) {
-                Log.d("KOGANNNNNNN", "IOEXCEPTION");
-            }
+        protected void onProgressUpdate(Integer... progUpdate) {
+            String msg = "Fetching " + this.slugs.get(progUpdate[0]) + "...";
+            dialog.setMessage(msg);
+         }
 
-            TELEVISIONS = new String[titles.size()];
-            TELEVISIONS = titles.toArray(TELEVISIONS);
+        protected Boolean doInBackground(final String... args) {
+            int idx = 0;
+            for(Map.Entry<String, ArrayList<String>> dep : this.departments.entrySet()){
+                publishProgress(idx);
+                String url = URL_PRODUCT + "&department=" + dep.getKey();
+                KoganService service = new KoganService();
+                try{
+                    List<Product> products = service.getProducts(url);
+                    for(Product p : products){
+                        dep.getValue().add(p.getTitle());
+                        Log.d("KOGANNNNNNN", p.toString());
+                        Log.d("KOGANNNNNNN", p.getTitle());
+                    }
+                } catch (IOException ignored) {
+                    Log.d("KOGANNNNNNN", "IOEXCEPTION");
+                }
+                idx++;
+            }
 
             return true;
         }
@@ -118,7 +141,7 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
 
         @Override
         public int getCount() {
-            return 2;
+            return DEPS.size();
         }
 
         @Override
@@ -129,15 +152,9 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
         @Override
         public Object instantiateItem(final ViewGroup container, final int position) {
             final ListView listView = new ListView(context);
-            switch (position) {
-                case 0:
-                    listView.setAdapter(countriesAdapter);
-                    break;
-                case 1:
-                    listView.setAdapter(statesAdapter);
-                    break;
-            }
+            listView.setAdapter(arrayAdapters.get(position));
             container.addView(listView, position);
+            Log.d("KOGANNNNNNN", "POSITION: " + position);
             return listView;
         }
 
@@ -147,14 +164,9 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
         }
 
         public String getTitle(final int position) {
-            if (position == 0) {
-                return "Televisions";
-            } else if (position == 1) {
-                return "States";
-            } else {
-                return "Unknown";
-            }
+            List<String> list = new ArrayList<String>(DEPS.keySet());
+            return list.get(position);
         }
-       
+
     }
 }
