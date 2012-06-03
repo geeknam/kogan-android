@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.app.ActionBar;
 import com.kogan.android.R;
 import com.viewpagerindicator.TitlePageIndicator;
@@ -60,6 +62,16 @@ public class ViewPagerExample extends RoboSherlockActivity implements ActionBar.
 
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         getSupportActionBar().setListNavigationCallbacks(list, this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Search")
+            .setIcon(R.drawable.ic_search)
+            .setActionView(R.layout.collapsible_edittext)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+        return true;
     }
 
     private void setupViewPager() {
