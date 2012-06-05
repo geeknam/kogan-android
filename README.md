@@ -41,7 +41,9 @@ Building from source
 Continuous integration
 ----------------------
 
-  CloudBees FOSS Jenkins instance at [geeknam.ci.cloudbees.com](https://geeknam.ci.cloudbees.com/job/kogan-android/)
+  [![Build Status](https://buildhive.cloudbees.com/job/geeknam/job/kogan-android/badge/icon)](https://buildhive.cloudbees.com/job/geeknam/job/kogan-android/)
+
+  Cloud Based Continuous Integration provided by [Buildhive CloudBees](https://buildhive.cloudbees.com/job/geeknam/job/kogan-android/)
 
 Acknowledgements
 ----------------
