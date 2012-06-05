@@ -41,9 +41,11 @@ Building from source
 Continuous integration
 ----------------------
 
-  CloudBees FOSS Jenkins instance at geeknam.ci.cloudbees.com
+  CloudBees FOSS Jenkins instance at [geeknam.ci.cloudbees.com](https://geeknam.ci.cloudbees.com/job/kogan-android/)
 
 Acknowledgements
 ----------------
 
-  Base template inspired by [Basedroid](http://basedroid.com)
+  * Base template from [Basedroid](http://basedroid.com)
+  * UI components including [ActionBarSherlock](https://github.com/JakeWharton/ActionBarSherlock) and [ViewPagerIndicator](https://github.com/JakeWharton/Android-ViewPagerIndicator) from [JakeWharton](https://github.com/JakeWharton/)
+  * Strong inspired by [Gaug.es for Android](https://github.com/github/gauges-android)

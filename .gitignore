@@ -1,4 +1,6 @@
 .DS_Store
+.idea
+*.iml
 target
 bin
 lib

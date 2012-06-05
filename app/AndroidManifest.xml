@@ -11,8 +11,5 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.examples.ListActivityExample"/>
-        <activity android:name=".ui.examples.ActionBarButtonsExample"/>
-        <activity android:name=".ui.examples.ViewPagerExample"/>
     </application>
 </manifest>
