@@ -12,16 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.util.Log;
 
 import com.viewpagerindicator.TitleProvider;
 
 
 public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     private final Context context;
-    private Map<String, ArrayList<String>> departments;
+    private ArrayList<String> departments;
     private ArrayList<ArrayAdapter<String>> arrayAdapters;
 
-    public CustomPagerAdapter(final Context context, Map<String, ArrayList<String>> departments, ArrayList<ArrayAdapter<String>> arrayAdapters) {
+    public CustomPagerAdapter(final Context context, ArrayList<String> departments, ArrayList<ArrayAdapter<String>> arrayAdapters) {
         this.context = context;
         this.departments = departments;
         this.arrayAdapters = arrayAdapters;
@@ -41,7 +42,7 @@ public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     public Object instantiateItem(final ViewGroup container, final int position) {
         final ListView listView = new ListView(context);
         listView.setAdapter(arrayAdapters.get(position));
-        container.addView(listView, position);
+        container.addView(listView, 0);
         return listView;
     }
 
@@ -51,7 +52,6 @@ public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     }
 
     public String getTitle(final int position) {
-        List<String> list = new ArrayList<String>(departments.keySet());
-        return list.get(position);
+        return departments.get(position);
     }
 }

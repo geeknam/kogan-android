@@ -6,3 +6,4 @@ bin
 lib
 tmp
 gen
+gen-external-apklibs

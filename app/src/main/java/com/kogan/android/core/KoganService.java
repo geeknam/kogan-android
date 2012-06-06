@@ -61,6 +61,10 @@ public class KoganService {
         }
     }
 
+    public List<Product> searchProducts(String keyword) throws IOException {
+        return getProducts("&keywords=" + keyword);
+    }
+
     public List<Department> getDepartments(String param) throws IOException {
         String url = URL_DEPARTMENT + param;
         try {

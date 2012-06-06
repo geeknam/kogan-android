@@ -1,30 +1,24 @@
 package com.kogan.android.ui;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
-import android.util.Log;
 import android.app.ProgressDialog;
-
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.widget.ArrayAdapter;
+import android.util.Log;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+import com.kogan.android.R;
+import com.kogan.android.adapters.CustomPagerAdapter;
+import com.kogan.android.core.KoganService;
+import com.kogan.android.core.Product;
 import com.viewpagerindicator.TitlePageIndicator;
 import roboguice.inject.InjectView;
 
-import com.kogan.android.R;
-import com.kogan.android.core.KoganService;
-import com.kogan.android.core.Product;
-import com.kogan.android.adapters.CustomPagerAdapter;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends BaseActivity {
@@ -35,7 +29,7 @@ public class MainActivity extends BaseActivity {
     private TitlePageIndicator titlePageIndicator;
 
     private ArrayList<ArrayAdapter<String>> arrayAdapters = new ArrayList<ArrayAdapter<String>>();
-    private Map<String, ArrayList<String>> DEPS = new HashMap<String, ArrayList<String>>();
+    private ArrayList<String> DEPS = new ArrayList<String>();
 
 
     @Override
@@ -44,72 +38,73 @@ public class MainActivity extends BaseActivity {
 
         setContentView(R.layout.main);
 
-        DEPS.put("televisions", new ArrayList<String>());
-        DEPS.put("phones", new ArrayList<String>());
-        DEPS.put("cameras", new ArrayList<String>());
+        DEPS.add("televisions");
+        DEPS.add("phones");
+        DEPS.add("cameras");
+        DEPS.add("audio");
 
-        new ProgressTask(MainActivity.this, DEPS).execute();
-
+        setupViewPager();
     }
 
     private void setupViewPager() {
 
-        for(ArrayList<String> dep : DEPS.values()){
-            arrayAdapters.add(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                dep.toArray(new String[dep.size()]))
-            );
+        for(String dep : DEPS){
+            arrayAdapters.add(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1));
         }
 
         viewPager.setAdapter(new CustomPagerAdapter(this, DEPS, arrayAdapters));
         titlePageIndicator.setViewPager(viewPager);
+        titlePageIndicator.setOnPageChangeListener(new DepartmentPageChangeListener());
+
+        new ProgressTask(MainActivity.this, DEPS.get(0)).execute();
+
+    }
+
+    private class DepartmentPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
+        @Override
+        public void onPageSelected(int position) {
+            if(arrayAdapters.get(position).getCount() < 1){
+                new ProgressTask(MainActivity.this, DEPS.get(position)).execute();
+            }
+        }
     }
 
     private class ProgressTask extends AsyncTask<String, Integer, Boolean> {
         private RoboSherlockActivity activity;
-        private Map<String, ArrayList<String>> departments;
-        private ArrayList<String> slugs;
+        private String slug;
+        private List<Product> data;
         private ProgressDialog dialog;
 
-        public ProgressTask(RoboSherlockActivity activity, Map<String, ArrayList<String>> departments) {
+        public ProgressTask(RoboSherlockActivity activity, String slug) {
             this.activity = activity;
-            this.departments = departments;
-            this.slugs = new ArrayList<String>(departments.keySet());
-
+            this.slug = slug;
         }
 
         protected void onPreExecute() {
-            dialog = ProgressDialog.show(activity, "Please wait...", "Fetching products...");
+            dialog = ProgressDialog.show(activity, "Please wait...", "Fetching " + slug + "...");
         }
 
+        // TODO: Make this more elegant
         @Override
         protected void onPostExecute(final Boolean success) {
-            setupViewPager();
+            for(int i=0; i<DEPS.size(); i++){
+                if(DEPS.get(i).equals(slug)){
+                    for(Product p : data){
+                        arrayAdapters.get(i).add(p.getTitle());
+                    }
+                    arrayAdapters.get(i).notifyDataSetChanged();
+                }
+            }
             dialog.dismiss();
         }
 
-        protected void onProgressUpdate(Integer... progUpdate) {
-            String msg = "Fetching " + this.slugs.get(progUpdate[0]) + "...";
-            dialog.setMessage(msg);
-         }
-
         protected Boolean doInBackground(final String... args) {
-            int idx = 0;
-            for(Map.Entry<String, ArrayList<String>> dep : this.departments.entrySet()){
-                publishProgress(idx);
-                String param = "&department=" + dep.getKey();
-                KoganService service = new KoganService();
-                try{
-                    List<Product> products = service.getProducts(param);
-                    for(Product p : products){
-                        dep.getValue().add(p.getTitle());
-                        // Log.d("KOGANNNNNNN", p.toString());
-                        // Log.d("KOGANNNNNNN", p.getTitle());
-                    }
-                } catch (IOException ignored) {
-                    // Log.d("KOGANNNNNNN", "IOEXCEPTION");
-                }
-                idx++;
+            String param = "&department=" + slug;
+            KoganService service = new KoganService();
+            try{
+                data = service.getProducts(param);
+            } catch (IOException ignored) {
+                Log.d("KOGANNNNNNN", "IOEXCEPTION");
             }
 
             return true;
