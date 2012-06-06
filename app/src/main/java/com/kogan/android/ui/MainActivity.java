@@ -2,36 +2,36 @@ package com.kogan.android.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.util.Log;
+import android.app.ProgressDialog;
+
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.app.ActionBar;
-import com.kogan.android.R;
 import com.viewpagerindicator.TitlePageIndicator;
 import com.viewpagerindicator.TitleProvider;
 import roboguice.inject.InjectView;
 
+import com.kogan.android.R;
 import com.kogan.android.core.KoganService;
 import com.kogan.android.core.Product;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-
 import java.io.IOException;
-import android.os.AsyncTask;
-import android.widget.Toast;
-import android.util.Log;
-import android.app.ProgressDialog;
+
 import static com.kogan.android.core.KoganConstants.URL_PRODUCT;
 
-public class MainActivity extends RoboSherlockActivity implements ActionBar.OnNavigationListener{
+public class MainActivity extends BaseActivity {
     @InjectView(R.id.view_pager_example_pager)
     private ViewPager viewPager;
     
@@ -39,15 +39,14 @@ public class MainActivity extends RoboSherlockActivity implements ActionBar.OnNa
     private TitlePageIndicator titlePageIndicator;
 
     private ArrayList<ArrayAdapter<String>> arrayAdapters = new ArrayList<ArrayAdapter<String>>();
-
-    private String[] departments;
     private Map<String, ArrayList<String>> DEPS = new HashMap<String, ArrayList<String>>();
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_pager_example);
+
+        setContentView(R.layout.main);
 
         DEPS.put("televisions", new ArrayList<String>());
         DEPS.put("phones", new ArrayList<String>());
@@ -55,23 +54,6 @@ public class MainActivity extends RoboSherlockActivity implements ActionBar.OnNa
 
         new ProgressTask(MainActivity.this, DEPS).execute();
 
-        departments = getResources().getStringArray(R.array.departments);
-        Context context = getSupportActionBar().getThemedContext();
-        ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.departments, R.layout.sherlock_spinner_item);
-        list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
-
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        getSupportActionBar().setListNavigationCallbacks(list, this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("Search")
-            .setIcon(R.drawable.ic_search)
-            .setActionView(R.layout.collapsible_edittext)
-            .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-
-        return true;
     }
 
     private void setupViewPager() {
@@ -138,12 +120,6 @@ public class MainActivity extends RoboSherlockActivity implements ActionBar.OnNa
         }
     }
 
-    
-    @Override
-    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        return true;
-    }
-
     private class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
         private final Context context;
 
@@ -166,7 +142,6 @@ public class MainActivity extends RoboSherlockActivity implements ActionBar.OnNa
             final ListView listView = new ListView(context);
             listView.setAdapter(arrayAdapters.get(position));
             container.addView(listView, position);
-            Log.d("KOGANNNNNNN", "POSITION: " + position);
             return listView;
         }
 

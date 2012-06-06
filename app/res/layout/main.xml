@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:gravity="center"
-        >
-    <Button
-            android:id="@+id/main_list_view_example_button"
-            android:layout_width="wrap_content"
+              android:layout_height="fill_parent">
+    <com.viewpagerindicator.TitlePageIndicator
+            android:id="@+id/view_pager_example_tpi"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/main_list_view_example_button_text"
-            />
-    <Button
-            android:id="@+id/main_action_bar_buttons_example_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_action_bar_buttons_example_button_text"
-            />
-    <Button
-            android:id="@+id/main_view_pager_example_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_view_pager_example_button_text"
+            style="@style/Widget.MyTitlepageIndicator"/>
+    <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager_example_pager"
+            android:layout_height="0dp"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
             />
 </LinearLayout>
-
