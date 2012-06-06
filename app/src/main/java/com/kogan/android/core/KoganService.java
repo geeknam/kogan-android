@@ -10,7 +10,10 @@ import com.github.kevinsawicki.http.HttpRequest.HttpRequestException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Collections;
-import android.util.Log;
+// import android.util.Log;
+
+import static com.kogan.android.core.KoganConstants.URL_PRODUCT;
+import static com.kogan.android.core.KoganConstants.URL_DEPARTMENT;
 
 public class KoganService {
 
@@ -18,6 +21,10 @@ public class KoganService {
 
     private static class ProductsWrapper {
         private List<Product> objects;
+    }
+
+    private static class DepartmentsWrapper {
+        private List<Department> objects;
     }
 
     protected HttpRequest execute(HttpRequest request) throws IOException {
@@ -29,8 +36,7 @@ public class KoganService {
         try {
             return GSON.fromJson(reader, target);
         } catch (JsonParseException e) {
-            Log.d("KOGAANNNNNN", "JsonParseException");
-            // throw new JsonException(e);
+            // Log.d("KOGAANNNNNN", "JsonParseException");
         } finally {
             try {
                 reader.close();
@@ -41,12 +47,12 @@ public class KoganService {
         return null;
     }
 
-    public List<Product> getProducts(String url) throws IOException {
+    public List<Product> getProducts(String param) throws IOException {
+        String url = URL_PRODUCT + param;
         try {
             HttpRequest request = execute(HttpRequest.get(url));
             ProductsWrapper response = fromJson(request, ProductsWrapper.class);
             if (response != null && response.objects != null){
-                Log.d("KOGAANNNNNN", "Got the products");
                 return response.objects;
             }
             return Collections.emptyList();
@@ -54,4 +60,19 @@ public class KoganService {
             throw e.getCause();
         }
     }
+
+    public List<Department> getDepartments(String param) throws IOException {
+        String url = URL_DEPARTMENT + param;
+        try {
+            HttpRequest request = execute(HttpRequest.get(url));
+            DepartmentsWrapper response = fromJson(request, DepartmentsWrapper.class);
+            if (response != null && response.objects != null){
+                return response.objects;
+            }
+            return Collections.emptyList();
+        } catch (HttpRequestException e) {
+            throw e.getCause();
+        }
+    }
+
 }

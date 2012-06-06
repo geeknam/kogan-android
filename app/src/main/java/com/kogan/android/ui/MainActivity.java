@@ -5,23 +5,20 @@ import android.os.Bundle;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 import android.util.Log;
 import android.app.ProgressDialog;
 
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.viewpagerindicator.TitlePageIndicator;
-import com.viewpagerindicator.TitleProvider;
 import roboguice.inject.InjectView;
 
 import com.kogan.android.R;
 import com.kogan.android.core.KoganService;
 import com.kogan.android.core.Product;
+import com.kogan.android.adapters.CustomPagerAdapter;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -29,7 +26,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
 
-import static com.kogan.android.core.KoganConstants.URL_PRODUCT;
 
 public class MainActivity extends BaseActivity {
     @InjectView(R.id.view_pager_example_pager)
@@ -65,7 +61,7 @@ public class MainActivity extends BaseActivity {
             );
         }
 
-        viewPager.setAdapter(new CustomPagerAdapter(this));
+        viewPager.setAdapter(new CustomPagerAdapter(this, DEPS, arrayAdapters));
         titlePageIndicator.setViewPager(viewPager);
     }
 
@@ -101,59 +97,22 @@ public class MainActivity extends BaseActivity {
             int idx = 0;
             for(Map.Entry<String, ArrayList<String>> dep : this.departments.entrySet()){
                 publishProgress(idx);
-                String url = URL_PRODUCT + "&department=" + dep.getKey();
+                String param = "&department=" + dep.getKey();
                 KoganService service = new KoganService();
                 try{
-                    List<Product> products = service.getProducts(url);
+                    List<Product> products = service.getProducts(param);
                     for(Product p : products){
                         dep.getValue().add(p.getTitle());
-                        Log.d("KOGANNNNNNN", p.toString());
-                        Log.d("KOGANNNNNNN", p.getTitle());
+                        // Log.d("KOGANNNNNNN", p.toString());
+                        // Log.d("KOGANNNNNNN", p.getTitle());
                     }
                 } catch (IOException ignored) {
-                    Log.d("KOGANNNNNNN", "IOEXCEPTION");
+                    // Log.d("KOGANNNNNNN", "IOEXCEPTION");
                 }
                 idx++;
             }
 
             return true;
         }
-    }
-
-    private class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
-        private final Context context;
-
-        private CustomPagerAdapter(final Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public int getCount() {
-            return DEPS.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(final View view, final Object o) {
-            return view == o;
-        }
-
-        @Override
-        public Object instantiateItem(final ViewGroup container, final int position) {
-            final ListView listView = new ListView(context);
-            listView.setAdapter(arrayAdapters.get(position));
-            container.addView(listView, position);
-            return listView;
-        }
-
-        @Override
-        public void destroyItem(final ViewGroup container, final int position, final Object object) {
-            container.removeView((ListView) object);
-        }
-
-        public String getTitle(final int position) {
-            List<String> list = new ArrayList<String>(DEPS.keySet());
-            return list.get(position);
-        }
-
     }
 }

@@ -50,4 +50,4 @@ Acknowledgements
 
   * Base template from [Basedroid](http://basedroid.com)
   * UI components including [ActionBarSherlock](https://github.com/JakeWharton/ActionBarSherlock) and [ViewPagerIndicator](https://github.com/JakeWharton/Android-ViewPagerIndicator) from [JakeWharton](https://github.com/JakeWharton/)
-  * Strong inspired by [Gaug.es for Android](https://github.com/github/gauges-android)
+  * Inspired by [Gaug.es for Android](https://github.com/github/gauges-android)
