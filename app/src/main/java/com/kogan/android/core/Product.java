@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class Product {
 	
+	public String id;
+
 	public String title;
 	
 	@SerializedName("short_title")
@@ -17,6 +19,8 @@ public class Product {
 	public String sku;
 	
 	public String price;
+
+	public String price_type;
 	
 	public String brand;
 	
@@ -36,6 +40,28 @@ public class Product {
 
 	public String getImageUrl(){
 		return "http://media.kogan.com/" + image;
+	}
+
+	public String getPrice(){
+		if(price.equals("0"))
+			return "Sold Out";
+		return "$" + price;
+	}
+
+	public boolean isSoldOut(){
+		if(price.equals("0")){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isLivePrice(){
+		if(price_type != null){
+			if(price_type.equals("Live")){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

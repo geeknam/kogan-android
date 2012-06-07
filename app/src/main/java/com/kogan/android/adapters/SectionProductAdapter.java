@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+
 import android.util.Log;
 
 import java.util.List;
@@ -75,8 +77,16 @@ public class SectionProductAdapter extends AmazingAdapter {
         if (res == null)
             res = inflater.inflate(R.layout.product_item, null);
         
-        ImageView image =(ImageView) res.findViewById(R.id.image);
-        imageLoader.DisplayImage(products.get(position).second.getImageUrl(), image);
+        Product p = products.get(position).second;
+
+        TextView price = (TextView) res.findViewById(R.id.price);
+        price.setText(p.getPrice());
+        if(p.isLivePrice()){
+            price.setTextColor(Color.parseColor("#bf0909"));
+        }
+
+        ImageView image = (ImageView) res.findViewById(R.id.image);
+        imageLoader.DisplayImage(p.getImageUrl(), image);
         
         return res;
     }

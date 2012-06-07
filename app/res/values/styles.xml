@@ -9,5 +9,6 @@
         <item name="footerLineHeight">1.5dp</item>
         <item name="footerPadding">6dp</item>
         <item name="selectedColor">#bf0909</item>
+        <item name="titlePadding">70dip</item>
     </style>
 </resources>
