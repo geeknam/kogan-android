@@ -11,18 +11,18 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ArrayAdapter;
+// import android.widget.ArrayAdapter;
 import android.util.Log;
 
 import com.viewpagerindicator.TitleProvider;
-
+import com.kogan.android.widget.lazylist.LazyAdapter;
 
 public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     private final Context context;
     private ArrayList<String> departments;
-    private ArrayList<ArrayAdapter<String>> arrayAdapters;
+    private ArrayList<LazyAdapter> arrayAdapters;
 
-    public CustomPagerAdapter(final Context context, ArrayList<String> departments, ArrayList<ArrayAdapter<String>> arrayAdapters) {
+    public CustomPagerAdapter(final Context context, ArrayList<String> departments, ArrayList<LazyAdapter> arrayAdapters) {
         this.context = context;
         this.departments = departments;
         this.arrayAdapters = arrayAdapters;

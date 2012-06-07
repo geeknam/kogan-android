@@ -11,18 +11,27 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Menu;
 
 import com.kogan.android.R;
-
+// import com.kogan.android.widget.amazinglist.*;
+import java.util.HashMap;
 
 
 public class BaseActivity extends RoboSherlockActivity implements ActionBar.OnNavigationListener{
 
-    private String[] departments;
+    public HashMap<String, String> departmentsMap = new HashMap<String, String>();
+    public AmazingListView lsProduct;
+    public ProductAdapter adapter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        departments = getResources().getStringArray(R.array.departments);
+        String[] departments = getResources().getStringArray(R.array.departments);
+        String[] department_slugs = getResources().getStringArray(R.array.department_slugs);
+
+        for(int i=0; i<departments.length; i++){
+            departmentsMap.put(department_slugs[i], departments[i]);
+        }
+
         Context context = getSupportActionBar().getThemedContext();
         ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.departments, R.layout.sherlock_spinner_item);
         list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
@@ -47,5 +56,9 @@ public class BaseActivity extends RoboSherlockActivity implements ActionBar.OnNa
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         return true;
     }
+
+    // class ProductAdapter extends AmazingAdapter {
+
+    // }
 
 }

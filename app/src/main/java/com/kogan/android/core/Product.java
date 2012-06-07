@@ -34,6 +34,10 @@ public class Product {
 		return this.title;
 	}
 
+	public String getImageUrl(){
+		return "http://media.kogan.com/" + image;
+	}
+
 	@Override
 	public String toString(){
 		return title;

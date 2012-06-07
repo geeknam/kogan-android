@@ -1,4 +1,4 @@
-package com.kogan.android.widget;
+package com.kogan.android.widget.amazinglist;
 
 import android.view.*;
 import android.widget.*;

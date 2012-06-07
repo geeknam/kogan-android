@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.widget.ArrayAdapter;
+// import android.widget.ArrayAdapter;
 import android.util.Log;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.kogan.android.R;
@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kogan.android.widget.lazylist.LazyAdapter;
+
 
 public class MainActivity extends BaseActivity {
     @InjectView(R.id.view_pager_example_pager)
@@ -28,7 +30,7 @@ public class MainActivity extends BaseActivity {
     @InjectView(R.id.view_pager_example_tpi)
     private TitlePageIndicator titlePageIndicator;
 
-    private ArrayList<ArrayAdapter<String>> arrayAdapters = new ArrayList<ArrayAdapter<String>>();
+    private ArrayList<LazyAdapter> arrayAdapters = new ArrayList<LazyAdapter>();
     private ArrayList<String> DEPS = new ArrayList<String>();
 
 
@@ -38,10 +40,9 @@ public class MainActivity extends BaseActivity {
 
         setContentView(R.layout.main);
 
-        DEPS.add("televisions");
-        DEPS.add("phones");
-        DEPS.add("cameras");
-        DEPS.add("audio");
+        for(String slug : departmentsMap.keySet()){
+            DEPS.add(slug);
+        }
 
         setupViewPager();
     }
@@ -49,7 +50,7 @@ public class MainActivity extends BaseActivity {
     private void setupViewPager() {
 
         for(String dep : DEPS){
-            arrayAdapters.add(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1));
+            arrayAdapters.add(new LazyAdapter(this));
         }
 
         viewPager.setAdapter(new CustomPagerAdapter(this, DEPS, arrayAdapters));
@@ -90,7 +91,7 @@ public class MainActivity extends BaseActivity {
             for(int i=0; i<DEPS.size(); i++){
                 if(DEPS.get(i).equals(slug)){
                     for(Product p : data){
-                        arrayAdapters.get(i).add(p.getTitle());
+                        arrayAdapters.get(i).add(p);
                     }
                     arrayAdapters.get(i).notifyDataSetChanged();
                 }

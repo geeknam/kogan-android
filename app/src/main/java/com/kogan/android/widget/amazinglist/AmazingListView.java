@@ -1,4 +1,4 @@
-package com.kogan.android.widget;
+package com.kogan.android.widget.amazinglist;
 
 import android.content.*;
 import android.graphics.*;
@@ -6,7 +6,7 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 
-import com.kogan.android.widget.AmazingAdapter.HasMorePagesListener;
+import com.kogan.android.widget.amazinglist.AmazingAdapter.HasMorePagesListener;
 
 /**
  * A ListView that maintains a header pinned at the top of the list. The

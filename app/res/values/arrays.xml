@@ -8,4 +8,13 @@
         <item>Audio</item>
         <item>Phones</item>
     </string-array>
+
+    <string-array name="department_slugs">
+        <item>televisions</item>
+        <item>home-appliances</item>
+        <item>cameras</item>
+        <item>tablets-laptops</item>
+        <item>audio</item>
+        <item>phones</item>
+    </string-array>
 </resources>
