@@ -18,15 +18,17 @@ import android.util.Log;
 import com.viewpagerindicator.TitleProvider;
 import com.kogan.android.widget.amazinglist.AmazingListView;
 import com.kogan.android.adapters.SectionProductAdapter;
+import com.kogan.android.ui.MainActivity;
 import com.kogan.android.R;
 
 public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
-    private Activity activity;
+    private MainActivity activity;
     private ArrayList<String> departments;
     private ArrayList<SectionProductAdapter> arrayAdapters;
     private static LayoutInflater inflater = null;
 
-    public CustomPagerAdapter(Activity a, ArrayList<String> departments, ArrayList<SectionProductAdapter> arrayAdapters) {
+
+    public CustomPagerAdapter(MainActivity a, ArrayList<String> departments, ArrayList<SectionProductAdapter> arrayAdapters) {
         this.activity = a;
         this.departments = departments;
         this.arrayAdapters = arrayAdapters;
@@ -49,6 +51,7 @@ public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
         final AmazingListView alv = new AmazingListView(c);
         alv.setPinnedHeaderView(inflater.inflate(R.layout.product_header, alv, false));
         alv.setAdapter(arrayAdapters.get(position));
+        arrayAdapters.get(position).notifyMayHaveMorePages();
         container.addView(alv, 0);
         return alv;
     }
@@ -59,6 +62,6 @@ public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     }
 
     public String getTitle(final int position) {
-        return departments.get(position);
+        return activity.departmentsMap.get(departments.get(position)).toUpperCase();
     }
 }

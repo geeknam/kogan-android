@@ -56,6 +56,7 @@ public class SectionProductAdapter extends AmazingAdapter {
 
     @Override
     protected void onNextPageRequested(int page) {
+        Log.d("KOGAANNNNN", "Page requested: " + page);
     }
 
     @Override
