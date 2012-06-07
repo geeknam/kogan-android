@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kogan.android.widget.lazylist.LazyAdapter;
+import com.kogan.android.adapters.SectionProductAdapter;
 
 
 public class MainActivity extends BaseActivity {
@@ -30,7 +30,7 @@ public class MainActivity extends BaseActivity {
     @InjectView(R.id.view_pager_example_tpi)
     private TitlePageIndicator titlePageIndicator;
 
-    private ArrayList<LazyAdapter> arrayAdapters = new ArrayList<LazyAdapter>();
+    private ArrayList<SectionProductAdapter> arrayAdapters = new ArrayList<SectionProductAdapter>();
     private ArrayList<String> DEPS = new ArrayList<String>();
 
 
@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
     private void setupViewPager() {
 
         for(String dep : DEPS){
-            arrayAdapters.add(new LazyAdapter(this));
+            arrayAdapters.add(new SectionProductAdapter(this));
         }
 
         viewPager.setAdapter(new CustomPagerAdapter(this, DEPS, arrayAdapters));

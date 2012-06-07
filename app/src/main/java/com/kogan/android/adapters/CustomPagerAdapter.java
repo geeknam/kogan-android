@@ -7,25 +7,30 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.LayoutInflater;
 import android.widget.ListView;
-// import android.widget.ArrayAdapter;
 import android.util.Log;
 
 import com.viewpagerindicator.TitleProvider;
-import com.kogan.android.widget.lazylist.LazyAdapter;
+import com.kogan.android.widget.amazinglist.AmazingListView;
+import com.kogan.android.adapters.SectionProductAdapter;
+import com.kogan.android.R;
 
 public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
-    private final Context context;
+    private Activity activity;
     private ArrayList<String> departments;
-    private ArrayList<LazyAdapter> arrayAdapters;
+    private ArrayList<SectionProductAdapter> arrayAdapters;
+    private static LayoutInflater inflater = null;
 
-    public CustomPagerAdapter(final Context context, ArrayList<String> departments, ArrayList<LazyAdapter> arrayAdapters) {
-        this.context = context;
+    public CustomPagerAdapter(Activity a, ArrayList<String> departments, ArrayList<SectionProductAdapter> arrayAdapters) {
+        this.activity = a;
         this.departments = departments;
         this.arrayAdapters = arrayAdapters;
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -40,15 +45,17 @@ public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
 
     @Override
     public Object instantiateItem(final ViewGroup container, final int position) {
-        final ListView listView = new ListView(context);
-        listView.setAdapter(arrayAdapters.get(position));
-        container.addView(listView, 0);
-        return listView;
+        Context c = (Context) activity;
+        final AmazingListView alv = new AmazingListView(c);
+        alv.setPinnedHeaderView(inflater.inflate(R.layout.product_header, alv, false));
+        alv.setAdapter(arrayAdapters.get(position));
+        container.addView(alv, 0);
+        return alv;
     }
 
     @Override
     public void destroyItem(final ViewGroup container, final int position, final Object object) {
-        container.removeView((ListView) object);
+        container.removeView((AmazingListView) object);
     }
 
     public String getTitle(final int position) {
