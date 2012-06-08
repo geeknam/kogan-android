@@ -19,18 +19,18 @@ import android.util.Log;
 import com.viewpagerindicator.TitleProvider;
 
 import com.kogan.android.widget.amazinglist.AmazingListView;
-import com.kogan.android.adapters.SectionProductAdapter;
+import com.kogan.android.adapters.ProductAdapter;
 import com.kogan.android.ui.MainActivity;
 import com.kogan.android.R;
 
 public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     private MainActivity activity;
     private String department_slug;
-    private ArrayList<SectionProductAdapter> arrayAdapters;
+    private ArrayList<ProductAdapter> arrayAdapters;
     private static LayoutInflater inflater = null;
 
 
-    public CustomPagerAdapter(MainActivity a, String slug, ArrayList<SectionProductAdapter> arrayAdapters) {
+    public CustomPagerAdapter(MainActivity a, String slug, ArrayList<ProductAdapter> arrayAdapters) {
         this.activity = a;
         this.department_slug = slug;
         this.arrayAdapters = arrayAdapters;

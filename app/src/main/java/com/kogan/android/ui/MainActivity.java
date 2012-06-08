@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kogan.android.adapters.SectionProductAdapter;
+import com.kogan.android.adapters.ProductAdapter;
 
 
 public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener{
@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     private EditText search;
     private static LayoutInflater inflater = null;
 
-    private ArrayList<SectionProductAdapter> arrayAdapters = new ArrayList<SectionProductAdapter>();
+    private ArrayList<ProductAdapter> arrayAdapters = new ArrayList<ProductAdapter>();
     public String department_slug;
     public List<Category> categories = new ArrayList<Category>();
 
@@ -94,7 +94,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     private void setupViewPager() {
 
         for(Category cat : categories){
-            arrayAdapters.add(new SectionProductAdapter(this, cat.getSlug()));
+            arrayAdapters.add(new ProductAdapter(this, cat.getSlug()));
         }
 
         viewPager.setAdapter(new CustomPagerAdapter(this, department_slug, arrayAdapters));

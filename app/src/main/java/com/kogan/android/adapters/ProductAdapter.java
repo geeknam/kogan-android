@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 
-public class SectionProductAdapter extends AmazingAdapter {
+public class ProductAdapter extends AmazingAdapter {
 
     List<Pair<String, Product>> products;
     public ImageLoader imageLoader;
@@ -32,7 +32,7 @@ public class SectionProductAdapter extends AmazingAdapter {
     private AsyncTask<Integer, Void, List<Product>> backgroundTask;
     private String department;
 
-    public SectionProductAdapter(Activity a, String d){
+    public ProductAdapter(Activity a, String d){
         activity = a;
         department = d;
         products = new ArrayList<Pair<String, Product>>();
