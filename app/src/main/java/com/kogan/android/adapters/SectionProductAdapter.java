@@ -3,6 +3,7 @@ package com.kogan.android.adapters;
 import com.kogan.android.widget.amazinglist.*;
 import com.kogan.android.widget.lazylist.ImageLoader;
 import com.kogan.android.core.Product;
+import com.kogan.android.core.KoganService;
 import com.kogan.android.R;
 
 import android.util.Pair;
@@ -14,21 +15,26 @@ import android.widget.TextView;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 
 import android.util.Log;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.IOException;
 
 public class SectionProductAdapter extends AmazingAdapter {
 
     List<Pair<String, Product>> products;
     public ImageLoader imageLoader;
     public Activity activity;
-    private static LayoutInflater inflater=null;
+    private static LayoutInflater inflater = null;
+    private AsyncTask<Integer, Void, List<Product>> backgroundTask;
+    private String department;
 
-    public SectionProductAdapter(Activity a){
+    public SectionProductAdapter(Activity a, String d){
         activity = a;
+        department = d;
         products = new ArrayList<Pair<String, Product>>();
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(activity.getApplicationContext());
@@ -54,9 +60,52 @@ public class SectionProductAdapter extends AmazingAdapter {
         return position;
     }
 
+    public void reset() {
+        Log.d("KOGAANNNNN", "RESET");
+    }
+
     @Override
     protected void onNextPageRequested(int page) {
         Log.d("KOGAANNNNN", "Page requested: " + page);
+
+        if (backgroundTask != null) {
+            backgroundTask.cancel(false);
+        }
+
+        backgroundTask = new AsyncTask<Integer, Void, List<Product>>() {
+            @Override
+            protected List<Product> doInBackground(Integer... params) {
+                int page = (params[0] - 1) * 5;
+                Log.d("KOGAANNNNN", "OFFSET: " + page);
+                String param = "&department=" + department + "&offset=" + page;
+                KoganService service = new KoganService();
+                List<Product> data = new ArrayList<Product>();
+                try{
+                    data = service.getProducts(param);
+                } catch (IOException ignored) {
+                    Log.d("KOGANNNNNNN", "IOEXCEPTION");
+                }
+
+                return data;
+            }
+            
+            @Override
+            protected void onPostExecute(List<Product> result) {
+                if (isCancelled()) return; 
+                
+                for(Product p : result){
+                    products.add(new Pair<String, Product>(p.getTitle(), p));
+                }
+
+                nextPage();
+                notifyDataSetChanged();
+                if(!result.isEmpty()) {
+                    notifyMayHaveMorePages();
+                } else {
+                    notifyNoMorePages();
+                }
+            };
+        }.execute(page);
     }
 
     @Override
@@ -65,7 +114,6 @@ public class SectionProductAdapter extends AmazingAdapter {
             view.findViewById(R.id.header).setVisibility(View.VISIBLE);
             TextView lSectionTitle = (TextView) view.findViewById(R.id.header);
             lSectionTitle.setText(getSections()[getSectionForPosition(position)]);
-            Log.d("KOGANNNNN", "bindSectionHeader: " + getSections()[getSectionForPosition(position)]);
         } else {
             Log.d("KOGANNNNN", "bindSectionHeader: GONE");
             view.findViewById(R.id.header).setVisibility(View.GONE);

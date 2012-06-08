@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-// import android.widget.ArrayAdapter;
 import android.util.Log;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.kogan.android.R;
@@ -50,7 +49,7 @@ public class MainActivity extends BaseActivity {
     private void setupViewPager() {
 
         for(String dep : DEPS){
-            arrayAdapters.add(new SectionProductAdapter(this));
+            arrayAdapters.add(new SectionProductAdapter(this, dep));
         }
 
         viewPager.setAdapter(new CustomPagerAdapter(this, DEPS, arrayAdapters));

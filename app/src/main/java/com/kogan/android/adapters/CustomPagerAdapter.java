@@ -50,6 +50,7 @@ public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
         Context c = (Context) activity;
         final AmazingListView alv = new AmazingListView(c);
         alv.setPinnedHeaderView(inflater.inflate(R.layout.product_header, alv, false));
+        alv.setLoadingView(inflater.inflate(R.layout.loading_view, null));
         alv.setAdapter(arrayAdapters.get(position));
         arrayAdapters.get(position).notifyMayHaveMorePages();
         container.addView(alv, 0);

@@ -20,11 +20,16 @@ public class KoganService {
     public static final Gson GSON = new Gson();
 
     private static class ProductsWrapper {
+        private Meta meta;
         private List<Product> objects;
     }
 
     private static class DepartmentsWrapper {
         private List<Department> objects;
+    }
+
+    private static class CategoriesWrapper {
+        private List<Category> objects;
     }
 
     protected HttpRequest execute(HttpRequest request) throws IOException {
@@ -70,6 +75,20 @@ public class KoganService {
         try {
             HttpRequest request = execute(HttpRequest.get(url));
             DepartmentsWrapper response = fromJson(request, DepartmentsWrapper.class);
+            if (response != null && response.objects != null){
+                return response.objects;
+            }
+            return Collections.emptyList();
+        } catch (HttpRequestException e) {
+            throw e.getCause();
+        }
+    }
+
+    public List<Category> getCategoriesForDepartment(String department) throws IOException {
+        String url = URL_DEPARTMENT + "&department=" + department;
+        try {
+            HttpRequest request = execute(HttpRequest.get(url));
+            CategoriesWrapper response = fromJson(request, CategoriesWrapper.class);
             if (response != null && response.objects != null){
                 return response.objects;
             }

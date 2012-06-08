@@ -1,13 +1,17 @@
 package com.kogan.android.core;
 
-public class Department {
+
+public class Category {
     
-    public String title;
-    public String slug;
-    public String image;
+    private String title;
+    private String slug;
 
     public String getTitle(){
         return this.title;
+    }
+
+    public String getSlug(){
+        return this.slug;
     }
 
     @Override
