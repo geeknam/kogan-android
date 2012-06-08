@@ -23,14 +23,14 @@ import com.kogan.android.adapters.ProductAdapter;
 import com.kogan.android.ui.MainActivity;
 import com.kogan.android.R;
 
-public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
+public class CategoryAdapter extends PagerAdapter implements TitleProvider {
     private MainActivity activity;
     private String department_slug;
     private ArrayList<ProductAdapter> arrayAdapters;
     private static LayoutInflater inflater = null;
 
 
-    public CustomPagerAdapter(MainActivity a, String slug, ArrayList<ProductAdapter> arrayAdapters) {
+    public CategoryAdapter(MainActivity a, String slug, ArrayList<ProductAdapter> arrayAdapters) {
         this.activity = a;
         this.department_slug = slug;
         this.arrayAdapters = arrayAdapters;

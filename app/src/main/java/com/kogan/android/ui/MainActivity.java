@@ -17,7 +17,7 @@ import android.util.Log;
 import com.actionbarsherlock.app.ActionBar;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
 import com.kogan.android.R;
-import com.kogan.android.adapters.CustomPagerAdapter;
+import com.kogan.android.adapters.CategoryAdapter;
 import com.kogan.android.core.KoganService;
 import com.kogan.android.core.Product;
 import com.kogan.android.core.Category;
@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
             arrayAdapters.add(new ProductAdapter(this, cat.getSlug()));
         }
 
-        viewPager.setAdapter(new CustomPagerAdapter(this, department_slug, arrayAdapters));
+        viewPager.setAdapter(new CategoryAdapter(this, department_slug, arrayAdapters));
         titlePageIndicator.setViewPager(viewPager);
         titlePageIndicator.setOnPageChangeListener(new DepartmentPageChangeListener());
 
