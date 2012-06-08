@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.ListView;
+import android.widget.AdapterView;
 import android.util.Log;
 
 import com.viewpagerindicator.TitleProvider;
+
 import com.kogan.android.widget.amazinglist.AmazingListView;
 import com.kogan.android.adapters.SectionProductAdapter;
 import com.kogan.android.ui.MainActivity;
@@ -49,6 +51,13 @@ public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     public Object instantiateItem(final ViewGroup container, final int position) {
         Context c = (Context) activity;
         final AmazingListView alv = new AmazingListView(c);
+        alv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                Log.d("KOGANNNNN", "Selected: " + arrayAdapters.get(position).getProduct(arg2).getTitle());
+                //TODO: fire ProductDetail activity with bundle extra as slug
+            }
+        });
         alv.setPinnedHeaderView(inflater.inflate(R.layout.product_header, alv, false));
         alv.setLoadingView(inflater.inflate(R.layout.loading_view, null));
         alv.setAdapter(arrayAdapters.get(position));

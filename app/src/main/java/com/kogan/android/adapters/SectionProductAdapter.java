@@ -44,6 +44,10 @@ public class SectionProductAdapter extends AmazingAdapter {
         products.add(new Pair<String, Product>(p.getTitle(), p));
     }
 
+    public Product getProduct(int index){
+        return products.get(index).second;
+    }
+
     @Override
     public int getCount() {
         return products.size();
