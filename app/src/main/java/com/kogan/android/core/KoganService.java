@@ -2,14 +2,18 @@ package com.kogan.android.core;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import java.io.Reader;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import com.github.kevinsawicki.http.HttpRequest.HttpRequestException;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.io.File;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Collections;
+
+import android.os.Environment;
 // import android.util.Log;
 
 import static com.kogan.android.core.KoganConstants.URL_PRODUCT;
@@ -18,6 +22,7 @@ import static com.kogan.android.core.KoganConstants.URL_DEPARTMENT;
 public class KoganService {
 
     public static final Gson GSON = new Gson();
+    public HashMap<String, String> cacheMap = new HashMap<String, String>();
 
     private static class ProductsWrapper {
         private Meta meta;
@@ -31,6 +36,34 @@ public class KoganService {
     private static class CategoriesWrapper {
         private List<Category> objects;
     }
+
+    private File getCacheDir(){
+        File cacheDir = null;
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(),"Kogan/JSON");
+        if(!cacheDir.exists())
+            cacheDir.mkdirs();
+
+        return cacheDir;
+    }
+
+    private void cacheResponse(String url){
+        HttpRequest request = HttpRequest.get(url);
+        File latest = new File(getCacheDir(), url);
+        request.receive(latest); 
+        cacheMap.put(url, request.eTag());
+    }
+
+    private boolean isResponseCached(String url){
+        String eTag = cacheMap.get(url);
+        if(eTag == null)
+            return false;
+        return HttpRequest.get(url).ifNoneMatch(eTag).notModified();
+    }
+
+    // private File getCachedResponse(url){
+    //     //TODO read from file cache
+    // }
 
     protected HttpRequest execute(HttpRequest request) throws IOException {
         return request;
@@ -65,6 +98,15 @@ public class KoganService {
             throw e.getCause();
         }
     }
+
+    public List<Product> getProductsFor(String department_slug, String category_slug) throws IOException {
+        if(category_slug != null){
+            return getProducts("&department=" + department_slug);
+        }
+        else{
+            return getProducts("&department=" + department_slug + "&category=" + category_slug);
+        }
+    } 
 
     public List<Product> searchProducts(String keyword) throws IOException {
         return getProducts("&keywords=" + keyword);

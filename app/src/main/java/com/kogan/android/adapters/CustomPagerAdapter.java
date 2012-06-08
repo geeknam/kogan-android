@@ -23,21 +23,21 @@ import com.kogan.android.R;
 
 public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     private MainActivity activity;
-    private ArrayList<String> departments;
+    private String department_slug;
     private ArrayList<SectionProductAdapter> arrayAdapters;
     private static LayoutInflater inflater = null;
 
 
-    public CustomPagerAdapter(MainActivity a, ArrayList<String> departments, ArrayList<SectionProductAdapter> arrayAdapters) {
+    public CustomPagerAdapter(MainActivity a, String slug, ArrayList<SectionProductAdapter> arrayAdapters) {
         this.activity = a;
-        this.departments = departments;
+        this.department_slug = slug;
         this.arrayAdapters = arrayAdapters;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return departments.size();
+        return activity.categories.size();
     }
 
     @Override
@@ -63,6 +63,6 @@ public class CustomPagerAdapter extends PagerAdapter implements TitleProvider {
     }
 
     public String getTitle(final int position) {
-        return activity.departmentsMap.get(departments.get(position)).toUpperCase();
+        return activity.categories.get(position).getTitle().toUpperCase();
     }
 }
