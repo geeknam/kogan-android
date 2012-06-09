@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <issueManagement>
-        <url>https://github.com/geeknam/kogan-android/issues</url>
+        <url>https://github.com/kogan/k3-android/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
@@ -24,9 +24,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/geeknam/kogan-android</url>
-        <connection>scm:git:git://github.com/geeknam/kogan-android.git</connection>
-        <developerConnection>scm:git:git@github.com:geeknam/kogan-android.git</developerConnection>
+        <url>https://github.com/kogan/k3-android</url>
+        <connection>scm:git:git://github.com/kogan/k3-android.git</connection>
+        <developerConnection>scm:git:git@github.com:kogan/k3-android.git</developerConnection>
     </scm>
 
     <developers>
