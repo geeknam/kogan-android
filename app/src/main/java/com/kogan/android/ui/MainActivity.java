@@ -35,10 +35,10 @@ import com.kogan.android.adapters.ProductAdapter;
 
 
 public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener{
-    @InjectView(R.id.view_pager_example_pager)
+    @InjectView(R.id.category_pager)
     private ViewPager viewPager;
     
-    @InjectView(R.id.view_pager_example_tpi)
+    @InjectView(R.id.category_pager_indicator)
     private TitlePageIndicator titlePageIndicator;
 
 

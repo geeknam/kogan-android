@@ -7,7 +7,7 @@
     <artifactId>kogan-android</artifactId>
     <packaging>apk</packaging>
     <name>Kogan Android app</name>
-    <url>https://github.com/geeknam/kogan-android</url>
+    <url>https://github.com/kogan/k3-android</url>
 
     <parent>
         <version>1.0-SNAPSHOT</version>

@@ -18,6 +18,7 @@ import android.os.Environment;
 
 import static com.kogan.android.core.KoganConstants.URL_PRODUCT;
 import static com.kogan.android.core.KoganConstants.URL_DEPARTMENT;
+import static com.kogan.android.core.KoganConstants.URL_CATEGORY;
 
 public class KoganService {
 
@@ -126,8 +127,9 @@ public class KoganService {
         }
     }
 
-    public List<Category> getCategoriesForDepartment(String department) throws IOException {
-        String url = URL_DEPARTMENT + "&department=" + department;
+    public List<Category> getCategoriesForDepartment(String department_slug) throws IOException {
+        String url = URL_DEPARTMENT + "&department=" + department_slug;
+        // String url = URL_CATEGORY + "&department__slug=" + department_slug;
         try {
             HttpRequest request = execute(HttpRequest.get(url));
             CategoriesWrapper response = fromJson(request, CategoriesWrapper.class);
