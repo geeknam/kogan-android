@@ -1,6 +1,8 @@
 package com.kogan.android.core;
 
-public class Department {
+import java.io.Serializable;
+
+public class Department implements Serializable{
     
     public String title;
     public String slug;

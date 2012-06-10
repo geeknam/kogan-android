@@ -1,7 +1,8 @@
 package com.kogan.android.core;
 
+import java.io.Serializable;
 
-public class Category {
+public class Category implements Serializable{
     
     private String title;
     private String slug;

@@ -1,8 +1,9 @@
 package com.kogan.android.core;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class Product {
+public class Product implements Serializable{
 	
 	public String id;
 
@@ -34,8 +35,16 @@ public class Product {
 	@SerializedName("free_shipping")
 	public boolean freeShipping;
 
+	public String getId(){
+		return this.id;
+	}
+
 	public String getTitle(){
 		return this.title;
+	}
+
+	public String getSlug(){
+		return this.slug;
 	}
 
 	public String getImageUrl(){

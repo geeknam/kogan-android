@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.viewpagerindicator.TitleProvider;
 import com.kogan.android.widget.amazinglist.AmazingListView;
 import com.kogan.android.adapters.ProductAdapter;
 import com.kogan.android.ui.MainActivity;
+import com.kogan.android.ui.ProductDetailActivity;
 import com.kogan.android.R;
 
 public class CategoryAdapter extends PagerAdapter implements TitleProvider {
@@ -56,6 +58,9 @@ public class CategoryAdapter extends PagerAdapter implements TitleProvider {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Log.d("KOGANNNNN", "Selected: " + arrayAdapters.get(position).getProduct(arg2).getTitle());
                 //TODO: fire ProductDetail activity with bundle extra as slug
+                Intent intent = new Intent(activity, ProductDetailActivity.class);
+                intent.putExtra("product", arrayAdapters.get(position).getProduct(arg2));
+                activity.startActivity(intent);
             }
         });
         alv.setPinnedHeaderView(inflater.inflate(R.layout.product_header, alv, false));

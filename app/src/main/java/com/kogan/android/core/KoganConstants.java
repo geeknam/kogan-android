@@ -7,6 +7,7 @@ public interface KoganConstants {
 	String URL_BASE = ROOT_URL + API_URL;
 	String FORMAT = "?format=json";
     String LIMIT = "&limit=5";
+    
 	String URL_PRODUCT = URL_BASE + "product/" + FORMAT + LIMIT;
     String URL_DEPARTMENT = URL_BASE + "department/" + FORMAT;
     String URL_CATEGORY = URL_BASE + "category/" + FORMAT;
