@@ -1,7 +1,9 @@
 package com.kogan.android.core;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Product implements Serializable{
 	
@@ -34,6 +36,10 @@ public class Product implements Serializable{
 	
 	@SerializedName("free_shipping")
 	public boolean freeShipping;
+
+	public ArrayList<Facet> facets;
+
+	public ArrayList<String> features;
 
 	public String getId(){
 		return this.id;
@@ -71,6 +77,14 @@ public class Product implements Serializable{
 			}
 		}
 		return false;
+	}
+
+	public ArrayList<Facet> getFacets(){
+		return facets;
+	}
+
+	public ArrayList<String> getFeatures(){
+		return features;
 	}
 
 	@Override

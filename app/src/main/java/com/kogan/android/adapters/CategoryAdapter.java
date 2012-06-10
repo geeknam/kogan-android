@@ -56,8 +56,6 @@ public class CategoryAdapter extends PagerAdapter implements TitleProvider {
         alv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Log.d("KOGANNNNN", "Selected: " + arrayAdapters.get(position).getProduct(arg2).getTitle());
-                //TODO: fire ProductDetail activity with bundle extra as slug
                 Intent intent = new Intent(activity, ProductDetailActivity.class);
                 intent.putExtra("product", arrayAdapters.get(position).getProduct(arg2));
                 activity.startActivity(intent);

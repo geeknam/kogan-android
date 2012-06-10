@@ -24,6 +24,9 @@ public class ProductDetailActivity extends BaseActivity {
     @InjectView(R.id.product_details_pager_indicator)
     private TabPageIndicator tabPageIndicator;
 
+    @InjectView(R.id.image)
+    private ImageView image;    
+
     Product product;
 
     @Override
@@ -37,10 +40,9 @@ public class ProductDetailActivity extends BaseActivity {
         ImageLoader imageLoader = new ImageLoader(getApplicationContext());
         product = (Product) getIntent().getSerializableExtra("product");
 
-        ImageView image = (ImageView) findViewById(R.id.image);
         imageLoader.DisplayImage(product.getImageUrl(), image);
 
-        detailsPager.setAdapter(new ProductDetailAdapter(this, product.getSlug()));
+        detailsPager.setAdapter(new ProductDetailAdapter(this, product));
         tabPageIndicator.setViewPager(detailsPager);
     }
 

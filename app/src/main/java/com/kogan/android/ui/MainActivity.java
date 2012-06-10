@@ -165,13 +165,13 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         }
 
         protected void onPreExecute() {
-            dialog = ProgressDialog.show(activity, "Please wait...", "Fetching categories for " + department_slug);
+            // dialog = ProgressDialog.show(activity, "Please wait...", "Fetching categories for " + department_slug);
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             setupViewPager();
-            dialog.dismiss();
+            // dialog.dismiss();
         }
 
         protected Boolean doInBackground(final String... args) {
