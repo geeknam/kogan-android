@@ -49,11 +49,10 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     private ArrayList<ProductAdapter> arrayAdapters = new ArrayList<ProductAdapter>();
     public String department_slug;
-    public List<Category> categories = new ArrayList<Category>();
+    public ArrayList<Category> categories = new ArrayList<Category>();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         Context context = getSupportActionBar().getThemedContext();
         ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.departments, R.layout.sherlock_spinner_item);
@@ -63,7 +62,6 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setListNavigationCallbacks(list, this);
 
-        setContentView(R.layout.main);
 
         inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         search = (EditText) inflater.inflate(R.layout.collapsible_edittext, null);
@@ -79,9 +77,26 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
             }
         });
 
-        department_slug = department_slugs[0];
-        new GetCategoriesTask(MainActivity.this).execute();
+        // Check whether we're recreating a previously destroyed instance
+        if (savedInstanceState != null) {
+            Log.d("KOGANNNNNNN", "Getting categories");
+            categories = savedInstanceState.getParcelableArrayList("categories");
+            setupViewPager();
+        } else {
+            new GetCategoriesTask(MainActivity.this).execute();
+        }
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        department_slug = department_slugs[0];
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.d("KOGANNNNNNN", "Saving categories");
+        savedInstanceState.putParcelableArrayList("categories", categories);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
@@ -177,7 +192,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         protected Boolean doInBackground(final String... args) {
             KoganService service = new KoganService();
             try{
-                categories = service.getCategoriesForDepartment(department_slug);
+                categories = (ArrayList) service.getCategoriesForDepartment(department_slug);
             } catch (IOException ignored) {
                 Log.d("KOGANNNNNNN", "IOEXCEPTION");
             }

@@ -3,8 +3,11 @@ package com.kogan.android.ui;
 import android.os.Bundle;
 import android.content.Intent;
 import android.widget.ImageView;
+import android.net.Uri;
 
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
 
 import android.support.v4.view.ViewPager;
 import com.viewpagerindicator.TabPageIndicator;
@@ -14,6 +17,7 @@ import com.kogan.android.R;
 import com.kogan.android.adapters.ProductDetailAdapter;
 import com.kogan.android.core.Product;
 import com.kogan.android.widget.lazylist.ImageLoader;
+import static com.kogan.android.core.KoganConstants.ROOT_URL;
 
 
 public class ProductDetailActivity extends BaseActivity {
@@ -50,13 +54,32 @@ public class ProductDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate your menu.
+        getSupportMenuInflater().inflate(R.menu.share_action_provider, menu);
+
+        // Set file with share history to the provider and set the share intent.
+        MenuItem actionItem = menu.findItem(R.id.menu_item_share_action_provider_action_bar);
+        ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
+        actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        actionProvider.setShareIntent(createShareIntent());
+
+        return true;
+    }
+
+    private Intent createShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, ROOT_URL + product.getUrl());
+        return shareIntent;
     }
 
 }

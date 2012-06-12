@@ -20,6 +20,8 @@ public class Product implements Serializable{
 	public String slug;
 	
 	public String sku;
+
+	public String url;
 	
 	public String price;
 
@@ -51,6 +53,10 @@ public class Product implements Serializable{
 
 	public String getSlug(){
 		return this.slug;
+	}
+
+	public String getUrl(){
+		return this.url;
 	}
 
 	public String getImageUrl(){
