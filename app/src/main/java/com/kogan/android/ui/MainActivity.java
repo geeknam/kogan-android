@@ -4,10 +4,12 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.view.inputmethod.EditorInfo;
+import android.view.View;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 
@@ -53,7 +55,9 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        
         Context context = getSupportActionBar().getThemedContext();
         ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.departments, R.layout.sherlock_spinner_item);
         list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
@@ -69,35 +73,25 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // performSearch();
+                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    actionId == EditorInfo.IME_ACTION_DONE ||
+                    event.getAction() == KeyEvent.ACTION_DOWN &&
+                    event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    intent.putExtra("query", search.getText().toString());
+                    startActivity(intent);
                     return true;
                 }
                 return false;
             }
         });
 
-        // Check whether we're recreating a previously destroyed instance
-        if (savedInstanceState != null) {
-            Log.d("KOGANNNNNNN", "Getting categories");
-            categories = savedInstanceState.getParcelableArrayList("categories");
-            setupViewPager();
-        } else {
-            new GetCategoriesTask(MainActivity.this).execute();
-        }
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        
         department_slug = department_slugs[0];
+        new GetCategoriesTask(MainActivity.this).execute();
+
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.d("KOGANNNNNNN", "Saving categories");
-        savedInstanceState.putParcelableArrayList("categories", categories);
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-    }
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
@@ -107,9 +101,9 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     private void setupViewPager() {
-
+        arrayAdapters.clear();
         for(Category cat : categories){
-            arrayAdapters.add(new ProductAdapter(this, cat.getSlug()));
+            arrayAdapters.add(new ProductAdapter(this, department_slug, cat.getSlug()));
         }
 
         viewPager.setAdapter(new CategoryAdapter(this, department_slug, arrayAdapters));
@@ -161,7 +155,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         protected Boolean doInBackground(final String... args) {
             KoganService service = new KoganService();
             try{
-                data = service.getProductsFor(department_slug, category_slug);
+                data = service.getProductsFor(department_slug, category_slug, 0);
             } catch (IOException ignored) {
                 Log.d("KOGANNNNNNN", "IOEXCEPTION");
             }

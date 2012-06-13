@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:hint="Search"
     android:inputType="text"
-    android:imeOptions="actionDone"
+    android:imeOptions="actionSearch"
+    android:singleLine="true"
     android:drawableLeft="@drawable/ic_search"
     android:id="@+id/search"/>

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Collections;
 
 import android.os.Environment;
-// import android.util.Log;
+import android.util.Log;
 
 import static com.kogan.android.core.KoganConstants.URL_PRODUCT;
 import static com.kogan.android.core.KoganConstants.URL_DEPARTMENT;
@@ -100,13 +100,8 @@ public class KoganService {
         }
     }
 
-    public List<Product> getProductsFor(String department_slug, String category_slug) throws IOException {
-        if(category_slug != null){
-            return getProducts("&department=" + department_slug);
-        }
-        else{
-            return getProducts("&department=" + department_slug + "&category=" + category_slug);
-        }
+    public List<Product> getProductsFor(String department_slug, String category_slug, int offset) throws IOException {
+        return getProducts("&department=" + department_slug + "&category=" + category_slug + "&offset=" + offset);
     } 
 
     public List<Product> searchProducts(String keyword) throws IOException {
@@ -128,8 +123,7 @@ public class KoganService {
     }
 
     public List<Category> getCategoriesForDepartment(String department_slug) throws IOException {
-        String url = URL_DEPARTMENT + "&department=" + department_slug;
-        // String url = URL_CATEGORY + "&department__slug=" + department_slug;
+        String url = URL_CATEGORY + "&department__slug=" + department_slug;
         try {
             HttpRequest request = execute(HttpRequest.get(url));
             CategoriesWrapper response = fromJson(request, CategoriesWrapper.class);

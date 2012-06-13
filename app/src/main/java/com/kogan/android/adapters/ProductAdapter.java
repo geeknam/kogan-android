@@ -31,10 +31,12 @@ public class ProductAdapter extends AmazingAdapter {
     private static LayoutInflater inflater = null;
     private AsyncTask<Integer, Void, List<Product>> backgroundTask;
     private String department;
+    private String category;
 
-    public ProductAdapter(Activity a, String d){
+    public ProductAdapter(Activity a, String d, String c){
         activity = a;
         department = d;
+        category = c;
         products = new ArrayList<Pair<String, Product>>();
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader = new ImageLoader(activity.getApplicationContext());
@@ -79,13 +81,12 @@ public class ProductAdapter extends AmazingAdapter {
         backgroundTask = new AsyncTask<Integer, Void, List<Product>>() {
             @Override
             protected List<Product> doInBackground(Integer... params) {
+                //TODO: refactor this
                 int page = (params[0] - 1) * 5;
-                Log.d("KOGAANNNNN", "OFFSET: " + page);
-                String param = "&department=" + department + "&offset=" + page;
                 KoganService service = new KoganService();
                 List<Product> data = new ArrayList<Product>();
                 try{
-                    data = service.getProducts(param);
+                    data = service.getProductsFor(department, category, page);
                 } catch (IOException ignored) {
                     Log.d("KOGANNNNNNN", "IOEXCEPTION");
                 }
