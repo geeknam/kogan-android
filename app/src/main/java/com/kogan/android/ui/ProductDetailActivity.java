@@ -72,7 +72,7 @@ public class ProductDetailActivity extends BaseActivity implements iRibbonMenuCa
     @Override
     public void RibbonMenuItemClick(int itemId) {
         switch (itemId){
-            case 0:
+            case R.id.menu_shop:
                 onBackPressed();
         }
     }
