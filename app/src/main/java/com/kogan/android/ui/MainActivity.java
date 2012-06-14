@@ -17,13 +17,21 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+import com.viewpagerindicator.TitlePageIndicator;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+
 import com.kogan.android.R;
+import com.kogan.android.adapters.ProductAdapter;
+import com.kogan.android.widget.ribbonmenu.RibbonMenuView;
+import com.kogan.android.widget.ribbonmenu.iRibbonMenuCallback;
 import com.kogan.android.adapters.CategoryAdapter;
 import com.kogan.android.core.KoganService;
 import com.kogan.android.core.Product;
 import com.kogan.android.core.Category;
-import com.viewpagerindicator.TitlePageIndicator;
+
 import roboguice.inject.InjectView;
 import roboguice.inject.InjectResource;
 
@@ -33,16 +41,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kogan.android.adapters.ProductAdapter;
 
 
-public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener{
+public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener, iRibbonMenuCallback{
     @InjectView(R.id.category_pager)
     private ViewPager viewPager;
     
     @InjectView(R.id.category_pager_indicator)
     private TitlePageIndicator titlePageIndicator;
 
+    @InjectView(R.id.ribbonMenuView)
+    private RibbonMenuView rbmView;
 
     @InjectResource(R.array.departments) String[] departments;
     @InjectResource(R.array.department_slugs) String[] department_slugs;
@@ -66,6 +75,9 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setListNavigationCallbacks(list, this);
 
+        rbmView.setMenuClickCallback(this);
+        rbmView.setMenuItems(R.menu.ribbon_menu);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         search = (EditText) inflater.inflate(R.layout.collapsible_edittext, null);
@@ -92,6 +104,22 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            rbmView.toggleMenu();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void RibbonMenuItemClick(int itemId) {
+
+    }
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {

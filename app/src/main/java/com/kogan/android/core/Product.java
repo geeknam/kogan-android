@@ -1,6 +1,7 @@
 package com.kogan.android.core;
 
 import com.google.gson.annotations.SerializedName;
+import static com.kogan.android.core.KoganConstants.MEDIA_URL;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ public class Product implements Serializable{
 	public String brand;
 	
 	public String image;
+
+	public ArrayList<String> images;
 	
 	public String description;
 	
@@ -60,7 +63,15 @@ public class Product implements Serializable{
 	}
 
 	public String getImageUrl(){
-		return "http://media.kogan.com/" + image;
+		return MEDIA_URL + image;
+	}
+
+	public ArrayList<String> getAllImages(){
+		ArrayList<String> ret = new ArrayList<String>();
+		for(String i : images){
+			ret.add(MEDIA_URL + i);
+		}
+		return ret;
 	}
 
 	public String getPrice(){

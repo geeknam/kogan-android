@@ -12,4 +12,6 @@ public interface KoganConstants {
     String URL_DEPARTMENT = URL_BASE + "department/" + FORMAT;
     String URL_CATEGORY = URL_BASE + "category/" + FORMAT;
 
+    String MEDIA_URL = "http://media.kogan.com/";
+
 }
