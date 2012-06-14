@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,18 +56,24 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     @InjectResource(R.array.departments) String[] departments;
     @InjectResource(R.array.department_slugs) String[] department_slugs;
+
+    public SharedPreferences sharedPreferences;
     private EditText search;
     private static LayoutInflater inflater = null;
 
     private ArrayList<ProductAdapter> arrayAdapters = new ArrayList<ProductAdapter>();
     public String department_slug;
     public ArrayList<Category> categories = new ArrayList<Category>();
+    public KoganService service;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        sharedPreferences = getSharedPreferences("KOGAN_PREF", 0);
+        service = new KoganService(sharedPreferences);
+
         Context context = getSupportActionBar().getThemedContext();
         ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.departments, R.layout.sherlock_spinner_item);
         list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
@@ -181,7 +188,6 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         }
 
         protected Boolean doInBackground(final String... args) {
-            KoganService service = new KoganService();
             try{
                 data = service.getProductsFor(department_slug, category_slug, 0);
             } catch (IOException ignored) {
@@ -212,7 +218,6 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         }
 
         protected Boolean doInBackground(final String... args) {
-            KoganService service = new KoganService();
             try{
                 categories = (ArrayList) service.getCategoriesForDepartment(department_slug);
             } catch (IOException ignored) {

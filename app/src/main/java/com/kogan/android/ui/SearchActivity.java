@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 
@@ -28,10 +29,14 @@ public class SearchActivity extends RoboSherlockListActivity {
     ListView productList;
     String[] productTitles;
     String query;
+    public SharedPreferences sharedPreferences;
+    public KoganService service;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getSharedPreferences("KOGAN_PREF", 0);
+        service = new KoganService(sharedPreferences);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
@@ -71,7 +76,6 @@ public class SearchActivity extends RoboSherlockListActivity {
         }
 
         protected Boolean doInBackground(final String... args) {
-            KoganService service = new KoganService();
             try{
                 List<Product> products = service.searchProducts(query);
                 productTitles = new String[products.size()];

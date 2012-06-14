@@ -1,6 +1,7 @@
 package com.kogan.android.core;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.JsonParseException;
 
 import com.github.kevinsawicki.http.HttpRequest;
@@ -12,7 +13,9 @@ import java.io.File;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Collections;
+import java.lang.reflect.Type;
 
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 
@@ -24,6 +27,12 @@ public class KoganService {
 
     public static final Gson GSON = new Gson();
     public HashMap<String, String> cacheMap = new HashMap<String, String>();
+    public Type productToken = new TypeToken<List<Product>>(){}.getType();
+    public StateManager stateManager;
+
+    public KoganService(SharedPreferences sp){
+        stateManager = new StateManager(sp);
+    }
 
     private static class ProductsWrapper {
         private Meta meta;
@@ -37,34 +46,6 @@ public class KoganService {
     private static class CategoriesWrapper {
         private List<Category> objects;
     }
-
-    private File getCacheDir(){
-        File cacheDir = null;
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(),"Kogan/JSON");
-        if(!cacheDir.exists())
-            cacheDir.mkdirs();
-
-        return cacheDir;
-    }
-
-    private void cacheResponse(String url){
-        HttpRequest request = HttpRequest.get(url);
-        File latest = new File(getCacheDir(), url);
-        request.receive(latest); 
-        cacheMap.put(url, request.eTag());
-    }
-
-    private boolean isResponseCached(String url){
-        String eTag = cacheMap.get(url);
-        if(eTag == null)
-            return false;
-        return HttpRequest.get(url).ifNoneMatch(eTag).notModified();
-    }
-
-    // private File getCachedResponse(url){
-    //     //TODO read from file cache
-    // }
 
     protected HttpRequest execute(HttpRequest request) throws IOException {
         return request;
@@ -86,17 +67,31 @@ public class KoganService {
         return null;
     }
 
+    private void cacheProducts(String key, List<Product> products){
+        stateManager.saveString(key, GSON.toJson(products, productToken));
+    }
+
+    private List<Product> getCachedProducts(String key){
+        return GSON.fromJson(stateManager.loadString(key), productToken);
+    }
+
     public List<Product> getProducts(String param) throws IOException {
         String url = URL_PRODUCT + param;
-        try {
-            HttpRequest request = execute(HttpRequest.get(url));
-            ProductsWrapper response = fromJson(request, ProductsWrapper.class);
-            if (response != null && response.objects != null){
-                return response.objects;
+        if (stateManager.contains(url)){
+            return getCachedProducts(url);
+        }
+        else{
+            try {
+                HttpRequest request = execute(HttpRequest.get(url));
+                ProductsWrapper response = fromJson(request, ProductsWrapper.class);
+                if (response != null && response.objects != null){
+                    cacheProducts(url, response.objects);
+                    return response.objects;
+                }
+                return Collections.emptyList();
+            } catch (HttpRequestException e) {
+                throw e.getCause();
             }
-            return Collections.emptyList();
-        } catch (HttpRequestException e) {
-            throw e.getCause();
         }
     }
 

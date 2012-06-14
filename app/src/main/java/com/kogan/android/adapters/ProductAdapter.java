@@ -4,6 +4,7 @@ import com.kogan.android.widget.amazinglist.*;
 import com.kogan.android.widget.lazylist.ImageLoader;
 import com.kogan.android.core.Product;
 import com.kogan.android.core.KoganService;
+import com.kogan.android.ui.MainActivity;
 import com.kogan.android.R;
 
 import android.util.Pair;
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -27,13 +27,13 @@ public class ProductAdapter extends AmazingAdapter {
 
     List<Pair<String, Product>> products;
     public ImageLoader imageLoader;
-    public Activity activity;
+    public MainActivity activity;
     private static LayoutInflater inflater = null;
     private AsyncTask<Integer, Void, List<Product>> backgroundTask;
     private String department;
     private String category;
 
-    public ProductAdapter(Activity a, String d, String c){
+    public ProductAdapter(MainActivity a, String d, String c){
         activity = a;
         department = d;
         category = c;
@@ -83,10 +83,9 @@ public class ProductAdapter extends AmazingAdapter {
             protected List<Product> doInBackground(Integer... params) {
                 //TODO: refactor this
                 int page = (params[0] - 1) * 5;
-                KoganService service = new KoganService();
                 List<Product> data = new ArrayList<Product>();
                 try{
-                    data = service.getProductsFor(department, category, page);
+                    data = activity.service.getProductsFor(department, category, page);
                 } catch (IOException ignored) {
                     Log.d("KOGANNNNNNN", "IOEXCEPTION");
                 }
